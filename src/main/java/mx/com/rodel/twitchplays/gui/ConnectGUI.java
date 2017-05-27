@@ -64,9 +64,6 @@ public class ConnectGUI extends GuiScreen{
 		text.mouseClicked(mouseX, mouseY, mouseButton);
 		
 		if(buttonList.get(0).mousePressed(mc, mouseX, mouseY)){
-			if(TwitchBot.isConnected){
-				TwitchBot.instance.disconnect();
-			}
 			connect();
 		}else if(buttonList.get(1).mousePressed(mc, mouseX, mouseY)){
 			TwitchBot.instance.disconnect();
@@ -74,6 +71,9 @@ public class ConnectGUI extends GuiScreen{
 	}
 	
 	public void connect(){
+		if(TwitchBot.isConnected){
+			TwitchBot.instance.disconnect();
+		}
 		if(text.getText().isEmpty() || !Helper.channelExists(text.getText())){
 			FMLClientHandler.instance().getClient().displayGuiScreen(null);
 			Helper.sendMessage("&cSorry but this channel does not exists!");

@@ -5,7 +5,8 @@ import java.awt.Color;
 public enum Actions {
 	POISON("Poison", 0x00FF00),
 	WHITER("Spawn wither", Color.GRAY),
-	THUNDER("A thunder", Color.YELLOW);
+	THUNDER("A thunder", Color.YELLOW),
+	DIAMOND("Get a diamond", Color.CYAN);
 	
 	public String name;
 	public int color;
