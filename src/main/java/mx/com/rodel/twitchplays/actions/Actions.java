@@ -3,10 +3,13 @@ package mx.com.rodel.twitchplays.actions;
 import java.awt.Color;
 
 public enum Actions {
-	POISON("Poison", 0x00FF00),
+	POISON("Poison", Color.GREEN),
 	WHITER("Spawn wither", Color.GRAY),
 	THUNDER("A thunder", Color.YELLOW),
-	DIAMOND("Get a diamond", Color.CYAN);
+	DIAMOND("Get a diamond", Color.CYAN),
+	MOUSE("Invert mouse", Color.BLUE),
+	CAMERA("Get upside down", Color.RED),
+	FIREWORK_POWERED("Firework powered", Color.ORANGE);
 	
 	public String name;
 	public int color;

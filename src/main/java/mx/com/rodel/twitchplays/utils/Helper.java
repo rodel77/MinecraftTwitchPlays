@@ -1,18 +1,15 @@
 package mx.com.rodel.twitchplays.utils;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map.Entry;
 
-import jline.internal.InputStreamReader;
-import json.JSONObject;
-import json.parser.JSONParser;
-import mx.com.rodel.twitchplays.TwitchPlays;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class Helper {
 	public static void sendMessage(String message){
@@ -67,7 +64,12 @@ public class Helper {
 		};
 	}
 	
-	public float lerp(float a, float b, float f){
-	    return a + f * (b - a);
+	public static World findWorld(EntityPlayer player){
+		for(WorldServer world : FMLCommonHandler.instance().getMinecraftServerInstance().worlds){
+			if(world.provider.getDimension()==player.world.provider.getDimension() && !world.isRemote){
+				return world;
+			}
+		}
+		return null;
 	}
 }

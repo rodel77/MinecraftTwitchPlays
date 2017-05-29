@@ -1,11 +1,11 @@
 package mx.com.rodel.twitchplays.events;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
 import java.util.Map.Entry;
+import java.util.Random;
 
+import mx.com.rodel.twitchplays.TwitchPlays;
+import mx.com.rodel.twitchplays.actions.ActionExecutor;
 import mx.com.rodel.twitchplays.actions.Actions;
 import mx.com.rodel.twitchplays.actions.State;
 import mx.com.rodel.twitchplays.bot.TwitchBot;
@@ -45,7 +45,7 @@ public class OverlayHandler extends Gui{
 	}
 	
 	public static void createActions(){
-		actions.clear();
+		actions = new HashMap<Integer, Entry<Actions,Integer>>();
 		int i = 0;
 		while(actions.size()!=3){
 			Actions action = Actions.values()[random.nextInt(Actions.values().length)];
@@ -59,6 +59,7 @@ public class OverlayHandler extends Gui{
 
 	public static boolean contains(Actions action){
 		for (int i = 0; i < actions.size(); i++) {
+			System.out.println("Executing actions contains... "+i);
 			if(actions.get(i).getKey()==action){
 				return true;
 			}
@@ -95,6 +96,12 @@ public class OverlayHandler extends Gui{
 				}
 			}
 			
+//			drawCenteredTexture(100, 100, 48, 246, 30, 5);
+//			drawTexturedModalRect(width/2 - (60/2) + 2, height/2 - (10/2), 48, 236, 56, 10);
+//			drawCenteredTexture(width/2, height/2, 48, 246, 60, 10);
+//			drawScaledCustomSizeModalRect(100, 100, 48, 246, 30, 5, 30, 5, 1, 1);
+//			drawModalRectWithCustomSizedTexture(100, 100, 0, 259, 30, 5, 2, 2);
+			
 			if(actions.size()== 3){
 				drawCenteredTexture(x+15, (height/2)-25, 0, 232, 24, 24);
 				drawCenteredTexture(x+15, (height/2)-25, actions.get(0).getKey().x, actions.get(0).getKey().y, 24, 24);
@@ -106,6 +113,10 @@ public class OverlayHandler extends Gui{
 				drawCenteredTexture(x+15, (height/2)+25, 0, 232, 24, 24);
 				drawCenteredTexture(x+15, (height/2)+25, actions.get(2).getKey().x, actions.get(2).getKey().y, 24, 24);
 				
+				if(ActionExecutor.currentAction!=null){
+					drawCenteredTexture(16, (height/2)-60, 24, 232, 24, 24);
+					drawCenteredTexture(16, (height/2)-60, ActionExecutor.currentAction.x, ActionExecutor.currentAction.y, 24, 24);
+				}
 				
 				drawString(fontRenderer, actions.get(0).getKey().name+" ("+actions.get(0).getValue()+" votes)", x+15+22, ((height/2)-25)-(fontRenderer.FONT_HEIGHT/2), actions.get(0).getKey().color);
 				drawString(fontRenderer, actions.get(1).getKey().name+" ("+actions.get(1).getValue()+" votes)", x+15+22, (height/2)-(fontRenderer.FONT_HEIGHT/2), actions.get(1).getKey().color);
@@ -114,10 +125,15 @@ public class OverlayHandler extends Gui{
 				drawString(fontRenderer, "!1", x+22, ((height/2)-25)-(fontRenderer.FONT_HEIGHT/2)+5, 0xFFFFFF);
 				drawString(fontRenderer, "!2", x+22, (height/2)-(fontRenderer.FONT_HEIGHT/2)+5, 0xFFFFFF);
 				drawString(fontRenderer, "!3", x+22, ((height/2)+25)-(fontRenderer.FONT_HEIGHT/2)+5, 0xFFFFFF);
+				
+				if(ActionExecutor.currentAction!=null){
+					drawString(fontRenderer, "Current: ", 35, ((height/2)-60)-(fontRenderer.FONT_HEIGHT/2), 0xFF33F2);
+					drawString(fontRenderer, ActionExecutor.currentAction.name, 35+fontRenderer.getStringWidth("Current: "), ((height/2)-60)-(fontRenderer.FONT_HEIGHT/2), ActionExecutor.currentAction.color);
+				}
 			}
 			
 			if(TwitchBot.instance.state==State.PRE_SELECTING || TwitchBot.instance.state==State.SELECTING){
-				long secs = TwitchBot.instance.currentTimer.remainingTime()/1000;
+				long secs = TwitchPlays.getRemaining()/1000;
 				drawCenteredString(fontRenderer, TwitchBot.instance.state==State.PRE_SELECTING ? "Next vote on "+secs+"..." : secs+" seconds for voting...", width/2, height-65, Helper.colorFromCountdown(secs, 10));
 			}
 			

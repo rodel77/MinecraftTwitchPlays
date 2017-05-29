@@ -11,19 +11,10 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 public class TickHandler {
 	@SubscribeEvent
 	public void tick(TickEvent e){
-		List<Scheduler> scheluder = new ArrayList<Scheduler>();
-		if((scheluder = TwitchPlays.timerManager).size()!=0){
-			for (int i = 0; i < scheluder.size(); i++) {
-				Scheduler sc = scheluder.get(i);
-				if(sc.canExecute()){
-					try {
-						sc.runnable.run();
-					} catch (Exception e2) {
-						e2.printStackTrace();
-					}
-					TwitchPlays.timerManager.remove(i);
-				}
-			}
+		if(TwitchPlays.timerStart != -1 && TwitchPlays.getRemaining() < 0){
+			TwitchPlays.timerStart = -1;
+			TwitchPlays.timerDelay = -1;
+			TwitchPlays.currentRunnable.run();
 		}
 	}
 }

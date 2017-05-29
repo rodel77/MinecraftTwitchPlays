@@ -1,8 +1,6 @@
 package mx.com.rodel.twitchplays.bot;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -14,7 +12,8 @@ import mx.com.rodel.twitchplays.actions.Actions;
 import mx.com.rodel.twitchplays.actions.State;
 import mx.com.rodel.twitchplays.events.OverlayHandler;
 import mx.com.rodel.twitchplays.utils.Helper;
-import mx.com.rodel.twitchplays.utils.Scheduler;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class TwitchBot extends PircBot{
 	
@@ -23,7 +22,7 @@ public class TwitchBot extends PircBot{
 
 	public String channel = "";
 	public State state = State.IDLE;
-	public Scheduler currentTimer;
+//	public Scheduler currentTimer;
 	public List<String> voters = new ArrayList<String>();
 	
 	public void changeState(State state){
@@ -33,36 +32,40 @@ public class TwitchBot extends PircBot{
 				OverlayHandler.state = 0;
 				break;
 			case SELECTING:
+				EntityPlayer player = FMLClientHandler.instance().getClientPlayerEntity();
 				voters.clear();
 				OverlayHandler.createActions();
 				OverlayHandler.state = 1;
-				
-				currentTimer = TwitchPlays.createTask(1000*30, new Runnable() {
+				if(ActionExecutor.currentExecutor != null){
+					ActionExecutor.currentExecutor.onEnd(player, Helper.findWorld(player));
+					ActionExecutor.currentExecutor = null;
+					ActionExecutor.currentAction = null;
+				}
+
+				TwitchPlays.setTask(1000*35, new Runnable() {
 					public void run() {
-						changeState(State.ACTION);
-						Actions best = null;
-						int bestV = -1;
+						Actions bestAction = null;
+						int bestVotes = -1;
 						for(Entry<Actions, Integer> vote : OverlayHandler.actions.values()){
-							if(vote.getValue()>bestV){
-								best = vote.getKey();
-								bestV = vote.getValue();
+							if(vote.getValue() > bestVotes){
+								bestAction = vote.getKey();
+								bestVotes = vote.getValue();
 							}
 						}
-						ActionExecutor.executeAction(best);
 						
-						currentTimer = TwitchPlays.createTask(1000*30, new Runnable() {
-							public void run() {
-								changeState(State.SELECTING);
-							}
-						});
+						ActionExecutor.executeAction(bestAction);
+						
 						changeState(State.PRE_SELECTING);
-						OverlayHandler.state = -1;
 					}
 				});
-				
 				break;
-			case ACTION:
+			case PRE_SELECTING:
 				OverlayHandler.state = -1;
+				TwitchPlays.setTask(1000*40, new Runnable() {
+					public void run() {
+						changeState(State.SELECTING);
+					}
+				});
 				break;
 			default:
 				break;
@@ -82,11 +85,6 @@ public class TwitchBot extends PircBot{
 		this.channel = channel;
 		Helper.sendMessage("Connected to "+channel+" channel!");
 		isConnected = true;
-		currentTimer = TwitchPlays.createTask(1000*10, new Runnable() {
-			public void run() {
-				changeState(State.SELECTING);
-			}
-		});
 		changeState(State.PRE_SELECTING);
 	}
 	

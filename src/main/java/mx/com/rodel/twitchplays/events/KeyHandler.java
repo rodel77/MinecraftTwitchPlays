@@ -3,7 +3,6 @@ package mx.com.rodel.twitchplays.events;
 import org.lwjgl.input.Keyboard;
 
 import mx.com.rodel.twitchplays.gui.ConnectGUI;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;

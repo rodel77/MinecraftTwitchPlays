@@ -4,6 +4,5 @@ public enum State {
 	IDLE,
 	PRE_SELECTING,
 	SELECTING,
-	WAITING,
-	ACTION;
+	WAITING;
 }
