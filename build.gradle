@@ -12,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 
 version = "0.0.1"
-group = "mx.com.rodel.twtichplays" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = "mx.com.rodel.twitchplays" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "twitchplays"
 
 sourceCompatibility = targetCompatibility = "1.6" // Need this here so eclipse task generates correctly.
@@ -31,6 +31,11 @@ minecraft {
     // simply re-run your setup task after changing the mappings to update your workspace.
     mappings = "snapshot_20161220"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+}
+
+configurations {
+    embed
+    compile.extendsFrom(embed)
 }
 
 dependencies {
@@ -55,7 +60,12 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     
+    embed "pircbot:pircbot:1.5.0"
     compile "pircbot:pircbot:1.5.0"
+}
+
+jar {
+    from configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
 }
 
 processResources {

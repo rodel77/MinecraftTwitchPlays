@@ -144,7 +144,7 @@ public class ActionExecutor {
 		World world = Helper.findWorld(player);
 		world.playSound(player, player.getPosition(), SoundEvents.ENTITY_ARROW_HIT_PLAYER, SoundCategory.BLOCKS, 1f, 1f);
 		
-		Helper.sendMessage("&aYou followers select &6"+action.name);
+		Helper.sendMessage("You followers select "+action.name);
 		
 		currentExecutor = executors.get(action);
 		currentAction = action;

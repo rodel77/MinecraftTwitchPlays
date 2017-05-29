@@ -8,21 +8,8 @@ import org.lwjgl.input.Keyboard;
 
 import mx.com.rodel.twitchplays.bot.TwitchBot;
 import mx.com.rodel.twitchplays.utils.Helper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackMelee;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.item.EntityFireworkRocket;
-import net.minecraft.entity.passive.EntityCow;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class ConnectGUI extends GuiScreen{

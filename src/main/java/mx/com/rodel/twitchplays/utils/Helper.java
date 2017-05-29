@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class Helper {
 	public static void sendMessage(String message){
-		FMLClientHandler.instance().getClient().player.sendMessage(new TextComponentString(("&f[&9TwitchPlays&f]&7 "+message).replace("&", "§")));
+		FMLClientHandler.instance().getClient().player.sendMessage(new TextComponentString(("[TwitchPlays] "+message).replace("&", "§")));
 	}
 	
 	public static boolean channelExists(String channel){
