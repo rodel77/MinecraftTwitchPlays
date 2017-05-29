@@ -1,9 +1,12 @@
 package mx.com.rodel.twitchplays.utils;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map.Entry;
 
+import mx.com.rodel.twitchplays.TwitchPlays;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
@@ -32,6 +35,35 @@ public class Helper {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	public static String update(){
+		try {
+			URL url = new URL("https://raw.githubusercontent.com/rodel77/MinecraftTwitchPlays/master/update.txt?_"+System.currentTimeMillis());
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			
+			connection.setRequestMethod("GET");
+			connection.setDoOutput(true);
+			connection.setUseCaches(false);
+
+			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+			
+			while((inputLine = reader.readLine()) != null){
+				response.append(inputLine);
+			}
+			reader.close();
+			
+			System.out.println(response.toString());
+			
+			return TwitchPlays.VERSION.equals(response.toString()) ? null : response.toString();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public static int colorFromCountdown(long number, int max){
